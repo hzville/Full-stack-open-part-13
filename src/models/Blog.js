@@ -1,32 +1,39 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../config/database.js";
 
-class Note extends Model {}
+class Blog extends Model {}
 
-Note.init(
+Blog.init(
   {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
-    content: {
+    author: {
+      type: DataTypes.TEXT,
+    },
+    url: {
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    important: {
-      type: DataTypes.BOOLEAN,
+    title: {
+      type: DataTypes.TEXT,
+      allowNull: false,
     },
-    date: {
-      type: DataTypes.DATE,
+    likes: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
     },
   },
   {
     sequelize,
     underscored: true,
     timestamps: false,
-    modelName: "note",
+    modelName: "blog",
   }
 );
 
-export default Note;
+Blog.sync();
+
+export default Blog;
