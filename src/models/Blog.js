@@ -1,5 +1,5 @@
 import { Model, DataTypes } from "sequelize";
-import sequelize from "../config/database.js";
+import { sequelize } from "../config/database.js";
 
 class Blog extends Model {}
 
@@ -33,7 +33,5 @@ Blog.init(
     modelName: "blog",
   }
 );
-
-Blog.sync();
 
 export default Blog;
