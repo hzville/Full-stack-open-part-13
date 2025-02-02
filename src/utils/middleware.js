@@ -4,7 +4,7 @@ const unknownEndpoint = (req, res) => {
 
 const errorHandler = (error, req, res, next) => {
   console.log("errorHandler middleware:", error.name);
-  res.status(400).send({ error: "Please check blog data" });
+  res.status(400).send({ error: "Please check input data" });
   next(error);
 };
 
