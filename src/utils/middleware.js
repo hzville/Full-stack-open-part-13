@@ -3,9 +3,11 @@ const unknownEndpoint = (req, res) => {
 };
 
 const errorHandler = (error, req, res, next) => {
+  if (error.name == "SequelizeValidationError") {
+    return res.status(400).send({ error: error.message });
+  }
   console.log("errorHandler middleware:", error.name);
-  res.status(400).send({ error: "Please check input data" });
-  next(error);
+  return res.status(400).send({ error: "Please check input data" });
 };
 
 export { errorHandler, unknownEndpoint };
