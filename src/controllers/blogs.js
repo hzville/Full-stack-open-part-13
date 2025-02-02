@@ -1,5 +1,6 @@
 import express from "express";
 import { Blog } from "../models/index.js";
+import "express-async-errors";
 
 const blogsRouter = express.Router();
 
@@ -14,12 +15,8 @@ blogsRouter.get("/", async (req, res) => {
 });
 
 blogsRouter.post("/", async (req, res) => {
-  try {
-    const blog = await Blog.create(req.body);
-    return res.json(blog);
-  } catch (error) {
-    return res.status(400).json({ error });
-  }
+  const blog = await Blog.create(req.body);
+  return res.json(blog);
 });
 
 blogsRouter.delete("/:id", findBlogById, async (req, res) => {
