@@ -1,12 +1,16 @@
 import express from "express";
-import { User } from "../models/index.js";
+import { User, Blog } from "../models/index.js";
 import "express-async-errors";
 import bcrypt from "bcrypt";
 
 const usersRouter = express.Router();
 
 usersRouter.get("/", async (req, res) => {
-  const users = await User.findAll();
+  const users = await User.findAll({
+    include: {
+      model: Blog,
+    },
+  });
   const usersWithoutPassowordHash = users.map((user) => {
     const userData = user.toJSON();
     delete userData.passwordHash;

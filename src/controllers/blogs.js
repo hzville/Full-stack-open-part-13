@@ -11,7 +11,12 @@ const findBlogById = async (req, res, next) => {
 };
 
 blogsRouter.get("/", async (req, res) => {
-  const blogs = await Blog.findAll();
+  const blogs = await Blog.findAll({
+    include: {
+      model: User,
+      attributes: { exclude: ["passwordHash", "createdAt", "updatedAt"] },
+    },
+  });
   res.json(blogs);
 });
 
