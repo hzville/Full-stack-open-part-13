@@ -18,7 +18,7 @@ loginRouter.post("/", async (req, res) => {
       id: user.id,
     };
 
-    const token = jwt.sign(userToken, JWT_SECRET);
+    const token = jwt.sign(userToken, JWT_SECRET, { expiresIn: "1h" });
     res.status(200).send({ token, username: user.username, name: user.name });
   } else {
     return res.status(401).send({ error: "invalid username or password" });

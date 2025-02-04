@@ -21,9 +21,10 @@ blogsRouter.post("/", tokenExtractor, async (req, res) => {
   return res.json(blog);
 });
 
-blogsRouter.delete("/:id", findBlogById, async (req, res) => {
+blogsRouter.delete("/:id", findBlogById, tokenExtractor, async (req, res) => {
   const blog = req.blog;
-  if (blog) {
+  const user = await User.findByPk(req.decodedToken.id);
+  if (blog.userId === user.id) {
     await blog.destroy();
     res.status(204).send();
   } else {
