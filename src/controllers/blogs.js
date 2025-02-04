@@ -1,6 +1,7 @@
 import express from "express";
-import { Blog } from "../models/index.js";
+import { Blog, User } from "../models/index.js";
 import "express-async-errors";
+import tokenExtractor from "../utils/tokenExtractor.js";
 
 const blogsRouter = express.Router();
 
@@ -14,8 +15,9 @@ blogsRouter.get("/", async (req, res) => {
   res.json(blogs);
 });
 
-blogsRouter.post("/", async (req, res) => {
-  const blog = await Blog.create(req.body);
+blogsRouter.post("/", tokenExtractor, async (req, res) => {
+  const user = await User.findByPk(req.decodedToken.id);
+  const blog = await Blog.create({ ...req.body, userId: user.id });
   return res.json(blog);
 });
 
