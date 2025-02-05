@@ -2,7 +2,7 @@ import express from "express";
 import { Blog, User } from "../models/index.js";
 import "express-async-errors";
 import tokenExtractor from "../utils/tokenExtractor.js";
-import { Op, where } from "sequelize";
+import { Op } from "sequelize";
 
 const blogsRouter = express.Router();
 
@@ -25,6 +25,7 @@ blogsRouter.get("/", async (req, res) => {
       attributes: { exclude: ["passwordHash", "createdAt", "updatedAt"] },
     },
     where,
+    order: [["likes", "DESC"]],
   });
   res.json(blogs);
 });
