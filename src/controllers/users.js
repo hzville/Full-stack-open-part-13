@@ -22,14 +22,17 @@ usersRouter.get("/", async (req, res) => {
 usersRouter.get("/:id", async (req, res) => {
   const user = await User.findByPk(req.params.id, {
     attributes: ["name", "username"],
-    include: {
-      model: Blog,
-      as: "readings",
-      attributes: { exclude: ["createdAt", "updatedAt", "userId"] },
-      through: {
-        attributes: [],
+    include: [
+      {
+        model: Blog,
+        as: "readings",
+        attributes: { exclude: ["createdAt", "updatedAt", "userId"] },
+        through: {
+          attributes: ["read", "id"],
+          as: "readinglists",
+        },
       },
-    },
+    ],
   });
   if (user) {
     res.json(user);
