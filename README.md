@@ -14,8 +14,8 @@ Install dependencies:
 npm install
 ```
 
-Start web server with:
+Start development environment with:
 
 ```
-npm start
+npm run dev
 ```
