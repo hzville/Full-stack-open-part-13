@@ -5,7 +5,7 @@ import ReadingList from "./ReadingList.js";
 User.hasMany(Blog);
 Blog.belongsTo(User);
 
-User.belongsToMany(ReadingList, { through: ReadingList });
-Blog.belongsToMany(ReadingList, { through: ReadingList });
+User.belongsToMany(Blog, { through: ReadingList, as: "readings" });
+Blog.belongsToMany(User, { through: ReadingList, as: "users_blogs" });
 
 export { Blog, User, ReadingList };

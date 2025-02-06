@@ -19,6 +19,25 @@ usersRouter.get("/", async (req, res) => {
   res.json(usersWithoutPassowordHash);
 });
 
+usersRouter.get("/:id", async (req, res) => {
+  const user = await User.findByPk(req.params.id, {
+    attributes: ["name", "username"],
+    include: {
+      model: Blog,
+      as: "readings",
+      attributes: { exclude: ["createdAt", "updatedAt", "userId"] },
+      through: {
+        attributes: [],
+      },
+    },
+  });
+  if (user) {
+    res.json(user);
+  } else {
+    res.status(404).end();
+  }
+});
+
 usersRouter.post("/", async (req, res) => {
   const { password, ...userData } = req.body;
   const passwordHash = await bcrypt.hash(password, 10);
