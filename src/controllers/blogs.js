@@ -2,6 +2,7 @@ import express from "express";
 import { Blog, User } from "../models/index.js";
 import "express-async-errors";
 import tokenExtractor from "../utils/tokenExtractor.js";
+import validateSession from "../utils/validateSession.js";
 import { Op } from "sequelize";
 
 const blogsRouter = express.Router();
@@ -30,22 +31,28 @@ blogsRouter.get("/", async (req, res) => {
   res.json(blogs);
 });
 
-blogsRouter.post("/", tokenExtractor, async (req, res) => {
+blogsRouter.post("/", tokenExtractor, validateSession, async (req, res) => {
   const user = await User.findByPk(req.decodedToken.id);
   const blog = await Blog.create({ ...req.body, userId: user.id });
   return res.json(blog);
 });
 
-blogsRouter.delete("/:id", findBlogById, tokenExtractor, async (req, res) => {
-  const blog = req.blog;
-  const user = await User.findByPk(req.decodedToken.id);
-  if (blog.userId === user.id) {
-    await blog.destroy();
-    res.status(204).send();
-  } else {
-    res.status(404).end();
+blogsRouter.delete(
+  "/:id",
+  findBlogById,
+  tokenExtractor,
+  validateSession,
+  async (req, res) => {
+    const blog = req.blog;
+    const user = await User.findByPk(req.decodedToken.id);
+    if (blog.userId === user.id) {
+      await blog.destroy();
+      res.status(204).send();
+    } else {
+      res.status(404).end();
+    }
   }
-});
+);
 
 blogsRouter.put("/:id", findBlogById, async (req, res) => {
   const blog = req.blog;
